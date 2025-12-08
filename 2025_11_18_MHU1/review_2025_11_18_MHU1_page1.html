@@ -61,8 +61,8 @@
     <div class="header">
         <h1>2025_11_18_MHU1 - Page 1/1</h1>
         <div class="stats">
-            <div class="stat mk">MKs: <span id="mk-count">14</span> (<span id="mk-labeled">0</span> labeled)</div>
-            <div class="stat hspc">HSPCs: <span id="hspc-count">5</span> (<span id="hspc-labeled">0</span> labeled)</div>
+            <div class="stat mk">MKs: <span id="mk-count">14</span> (<span id="mk-labeled">0</span> on page, <span id="mk-global">0</span> total)</div>
+            <div class="stat hspc">HSPCs: <span id="hspc-count">5</span> (<span id="hspc-labeled">0</span> on page, <span id="hspc-global">0</span> total)</div>
         </div>
     </div>
 
@@ -152,10 +152,33 @@
         }
 
         function updateCounts() {
+            // Per-page counts
             const mkLabeled = Object.values(labels.mk).filter(v => v !== -1 && v !== undefined).length;
             const hspcLabeled = Object.values(labels.hspc).filter(v => v !== -1 && v !== undefined).length;
             document.getElementById('mk-labeled').textContent = mkLabeled;
             document.getElementById('hspc-labeled').textContent = hspcLabeled;
+
+            // Update global counts
+            updateGlobalCounts();
+        }
+
+        function updateGlobalCounts() {
+            // Load all page labels and sum up global counts
+            let globalMK = 0;
+            let globalHSPC = 0;
+
+            // Scan all pages for this slide
+            for (let page = 1; page <= 1; page++) {
+                const pageLabels = localStorage.getItem('unified_labels_2025_11_18_MHU1_page' + page);
+                if (pageLabels) {
+                    const parsed = JSON.parse(pageLabels);
+                    globalMK += Object.values(parsed.mk || {}).filter(v => v !== -1 && v !== undefined).length;
+                    globalHSPC += Object.values(parsed.hspc || {}).filter(v => v !== -1 && v !== undefined).length;
+                }
+            }
+
+            document.getElementById('mk-global').textContent = globalMK;
+            document.getElementById('hspc-global').textContent = globalHSPC;
         }
 
         function saveToLocalStorage() {
