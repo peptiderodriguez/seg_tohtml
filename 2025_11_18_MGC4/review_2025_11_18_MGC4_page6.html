@@ -186,24 +186,53 @@
         }
 
         function saveLabels() {
+            // Save current page
             saveToLocalStorage();
-            showToast('Labels saved to browser');
+            showToast('All labels saved to browser (auto-saved on every click)');
         }
 
         function exportLabels() {
-            const exportData = {
-                slide: '2025_11_18_MGC4',
-                page: 6,
-                mk: { labels: labels.mk, samples: mkSamples.map(s => ({ idx: s.idx, tile_id: s.tile_id, det_id: s.det_id })) },
-                hspc: { labels: labels.hspc, samples: hspcSamples.map(s => ({ idx: s.idx, tile_id: s.tile_id, det_id: s.det_id })) }
-            };
-            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            // Export ALL annotations across ALL slides and pages
+            const allData = {};
+
+            // Scan all localStorage keys
+            const allKeys = Object.keys(localStorage);
+            for (const key of allKeys) {
+                if (key.startsWith('unified_labels_') && key.includes('_page')) {
+                    try {
+                        const pageLabels = localStorage.getItem(key);
+                        if (pageLabels) {
+                            const parsed = JSON.parse(pageLabels);
+
+                            // Extract slide name from key (e.g., "unified_labels_2025_11_18_FGC1_page1" -> "2025_11_18_FGC1")
+                            const match = key.match(/unified_labels_(.+)_page(\d+)/);
+                            if (match) {
+                                const slideName = match[1];
+                                const pageNum = match[2];
+
+                                if (!allData[slideName]) {
+                                    allData[slideName] = { mk: {}, hspc: {} };
+                                }
+
+                                // Merge labels
+                                Object.assign(allData[slideName].mk, parsed.mk || {});
+                                Object.assign(allData[slideName].hspc, parsed.hspc || {});
+                            }
+                        }
+                    } catch(e) {
+                        console.error('Error parsing:', key, e);
+                    }
+                }
+            }
+
+            // Export as single JSON
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'unified_labels_2025_11_18_MGC4_page6.json';
+            a.download = 'all_unified_labels.json';
             a.click();
-            showToast('Labels exported');
+            showToast('All labels exported');
         }
 
         function showToast(msg) {
@@ -219,6 +248,15 @@
 
         mkSamples.forEach(s => mkGrid.appendChild(createCard(s, 'mk')));
         hspcSamples.forEach(s => hspcGrid.appendChild(createCard(s, 'hspc')));
+
+        // Auto-hide empty tabs and show the one with data
+        if (mkSamples.length === 0) {
+            document.querySelector('.tab.mk').style.display = 'none';
+            showTab('hspc');
+        } else if (hspcSamples.length === 0) {
+            document.querySelector('.tab.hspc').style.display = 'none';
+            showTab('mk');
+        }
 
         updateCounts();
     </script>
