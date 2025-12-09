@@ -58,6 +58,7 @@
         <h2>🔴 Megakaryocytes (MKs)</h2>
         <div class="controls">
             <a href="mk_page1.html" class="btn btn-primary">Review MKs →</a>
+            <button class="btn" onclick="exportCellTypeAnnotations('mk', 4)">Export MK Annotations</button>
             <span style="margin: 0 20px; color: #888;">4 pages • ~300 per page</span>
         </div>
     </div>
@@ -66,11 +67,13 @@
         <h2>🔵 HSPCs</h2>
         <div class="controls">
             <a href="hspc_page1.html" class="btn btn-primary">Review HSPCs →</a>
+            <button class="btn" onclick="exportCellTypeAnnotations('hspc', 74)">Export HSPC Annotations</button>
             <span style="margin: 0 20px; color: #888;">74 pages • ~300 per page</span>
         </div>
     </div>
 
     <div class="controls">
+        <button class="btn" onclick="exportAllAnnotations()">Export All Annotations (MK + HSPC)</button>
         <button class="btn btn-clear" onclick="clearAllAnnotations()">Clear All Annotations</button>
     </div>
 
@@ -97,6 +100,102 @@
 
             document.getElementById('mk-annotation-count').textContent = mkAnnotations.toLocaleString();
             document.getElementById('hspc-annotation-count').textContent = hspcAnnotations.toLocaleString();
+        }
+
+        function exportCellTypeAnnotations(cellType, totalPages) {
+            // Collect annotations from all pages for this cell type
+            const allLabels = {};
+
+            for (let page = 1; page <= totalPages; page++) {
+                const key = `${cellType}_labels_page${page}`;
+                const pageLabels = localStorage.getItem(key);
+                if (pageLabels) {
+                    try {
+                        const parsed = JSON.parse(pageLabels);
+                        // Merge into allLabels
+                        Object.assign(allLabels, parsed);
+                    } catch(e) {
+                        console.error(`Failed to parse ${key}:`, e);
+                    }
+                }
+            }
+
+            const annotatedCount = Object.keys(allLabels).length;
+
+            if (annotatedCount === 0) {
+                alert(`No ${cellType.toUpperCase()} annotations to export`);
+                return;
+            }
+
+            // Export as JSON
+            const blob = new Blob([JSON.stringify(allLabels, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${cellType}_labels_all.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert(`Exported ${annotatedCount} ${cellType.toUpperCase()} annotations`);
+        }
+
+        function exportAllAnnotations() {
+            // Collect both MK and HSPC annotations
+            const mkLabels = {};
+            const hspcLabels = {};
+
+            // Collect MK annotations (4 pages)
+            for (let page = 1; page <= 4; page++) {
+                const key = `mk_labels_page${page}`;
+                const pageLabels = localStorage.getItem(key);
+                if (pageLabels) {
+                    try {
+                        const parsed = JSON.parse(pageLabels);
+                        Object.assign(mkLabels, parsed);
+                    } catch(e) {}
+                }
+            }
+
+            // Collect HSPC annotations (74 pages)
+            for (let page = 1; page <= 74; page++) {
+                const key = `hspc_labels_page${page}`;
+                const pageLabels = localStorage.getItem(key);
+                if (pageLabels) {
+                    try {
+                        const parsed = JSON.parse(pageLabels);
+                        Object.assign(hspcLabels, parsed);
+                    } catch(e) {}
+                }
+            }
+
+            const mkCount = Object.keys(mkLabels).length;
+            const hspcCount = Object.keys(hspcLabels).length;
+
+            if (mkCount === 0 && hspcCount === 0) {
+                alert('No annotations to export');
+                return;
+            }
+
+            // Export combined
+            const combined = {
+                mk: mkLabels,
+                hspc: hspcLabels,
+                metadata: {
+                    mk_count: mkCount,
+                    hspc_count: hspcCount,
+                    export_date: new Date().toISOString()
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(combined, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'all_labels_combined.json';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert(`Exported ${mkCount} MK + ${hspcCount} HSPC annotations`);
         }
 
         function clearAllAnnotations() {
