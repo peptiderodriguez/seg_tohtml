@@ -125,7 +125,36 @@
                 return;
             }
 
-            const blob = new Blob([JSON.stringify(allLabels, null, 2)], { type: 'application/json' });
+            // Categorize by label: 1=positive, 0=negative, 2=unsure
+            const positive = [];
+            const negative = [];
+            const unsure = [];
+
+            for (const [idx, label] of Object.entries(allLabels)) {
+                if (label === 1) {
+                    positive.push(parseInt(idx));
+                } else if (label === 0) {
+                    negative.push(parseInt(idx));
+                } else if (label === 2) {
+                    unsure.push(parseInt(idx));
+                }
+            }
+
+            const exportData = {
+                positive: positive,
+                negative: negative,
+                unsure: unsure,
+                metadata: {
+                    cell_type: cellType,
+                    total_annotated: annotatedCount,
+                    positive_count: positive.length,
+                    negative_count: negative.length,
+                    unsure_count: unsure.length,
+                    export_date: new Date().toISOString()
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -133,7 +162,7 @@
             a.click();
             URL.revokeObjectURL(url);
 
-            alert(`Exported ${annotatedCount} ${cellType.toUpperCase()} annotations`);
+            alert(`Exported ${cellType.toUpperCase()}: ${positive.length} positive, ${negative.length} negative, ${unsure.length} unsure`);
         }
 
         function exportAllAnnotations() {
@@ -162,20 +191,50 @@
                 }
             }
 
-            const mkCount = Object.keys(mkLabels).length;
-            const hspcCount = Object.keys(hspcLabels).length;
+            // Categorize MK labels
+            const mkPositive = [];
+            const mkNegative = [];
+            const mkUnsure = [];
+            for (const [idx, label] of Object.entries(mkLabels)) {
+                if (label === 1) mkPositive.push(parseInt(idx));
+                else if (label === 0) mkNegative.push(parseInt(idx));
+                else if (label === 2) mkUnsure.push(parseInt(idx));
+            }
 
-            if (mkCount === 0 && hspcCount === 0) {
+            // Categorize HSPC labels
+            const hspcPositive = [];
+            const hspcNegative = [];
+            const hspcUnsure = [];
+            for (const [idx, label] of Object.entries(hspcLabels)) {
+                if (label === 1) hspcPositive.push(parseInt(idx));
+                else if (label === 0) hspcNegative.push(parseInt(idx));
+                else if (label === 2) hspcUnsure.push(parseInt(idx));
+            }
+
+            if (mkPositive.length === 0 && mkNegative.length === 0 && mkUnsure.length === 0 &&
+                hspcPositive.length === 0 && hspcNegative.length === 0 && hspcUnsure.length === 0) {
                 alert('No annotations to export');
                 return;
             }
 
             const combined = {
-                mk: mkLabels,
-                hspc: hspcLabels,
+                mk: {
+                    positive: mkPositive,
+                    negative: mkNegative,
+                    unsure: mkUnsure
+                },
+                hspc: {
+                    positive: hspcPositive,
+                    negative: hspcNegative,
+                    unsure: hspcUnsure
+                },
                 metadata: {
-                    mk_count: mkCount,
-                    hspc_count: hspcCount,
+                    mk_positive_count: mkPositive.length,
+                    mk_negative_count: mkNegative.length,
+                    mk_unsure_count: mkUnsure.length,
+                    hspc_positive_count: hspcPositive.length,
+                    hspc_negative_count: hspcNegative.length,
+                    hspc_unsure_count: hspcUnsure.length,
                     export_date: new Date().toISOString()
                 }
             };
@@ -188,7 +247,9 @@
             a.click();
             URL.revokeObjectURL(url);
 
-            alert(`Exported ${mkCount} MK + ${hspcCount} HSPC annotations`);
+            const mkTotal = mkPositive.length + mkNegative.length + mkUnsure.length;
+            const hspcTotal = hspcPositive.length + hspcNegative.length + hspcUnsure.length;
+            alert(`Exported MKs: ${mkPositive.length}+ / ${mkNegative.length}- / ${mkUnsure.length}?\nHSPCs: ${hspcPositive.length}+ / ${hspcNegative.length}- / ${hspcUnsure.length}?`);
         }
 
         function clearAllAnnotations() {
