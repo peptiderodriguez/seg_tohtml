@@ -103,7 +103,6 @@
         }
 
         function exportCellTypeAnnotations(cellType, totalPages) {
-            // Collect annotations from all pages for this cell type
             const allLabels = {};
 
             for (let page = 1; page <= totalPages; page++) {
@@ -112,7 +111,6 @@
                 if (pageLabels) {
                     try {
                         const parsed = JSON.parse(pageLabels);
-                        // Merge into allLabels
                         Object.assign(allLabels, parsed);
                     } catch(e) {
                         console.error(`Failed to parse ${key}:`, e);
@@ -127,7 +125,6 @@
                 return;
             }
 
-            // Export as JSON
             const blob = new Blob([JSON.stringify(allLabels, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -140,11 +137,9 @@
         }
 
         function exportAllAnnotations() {
-            // Collect both MK and HSPC annotations
             const mkLabels = {};
             const hspcLabels = {};
 
-            // Collect MK annotations (4 pages)
             for (let page = 1; page <= 4; page++) {
                 const key = `mk_labels_page${page}`;
                 const pageLabels = localStorage.getItem(key);
@@ -156,7 +151,6 @@
                 }
             }
 
-            // Collect HSPC annotations (74 pages)
             for (let page = 1; page <= 74; page++) {
                 const key = `hspc_labels_page${page}`;
                 const pageLabels = localStorage.getItem(key);
@@ -176,7 +170,6 @@
                 return;
             }
 
-            // Export combined
             const combined = {
                 mk: mkLabels,
                 hspc: hspcLabels,

@@ -8,6 +8,9 @@
 
         .header { background: #111; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
         .header h1 { font-size: 1.2em; font-weight: normal; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .home-btn { padding: 8px 16px; background: #1a1a1a; border: 1px solid #333; color: #ddd; text-decoration: none; }
+        .home-btn:hover { background: #222; }
         .stats { display: flex; gap: 20px; font-size: 0.9em; }
         .stat { padding: 4px 12px; background: #1a1a1a; border: 1px solid #333; }
 
@@ -41,14 +44,17 @@
 </head>
 <body>
     <div class="header">
-        <h1>HSPCs - Page 18/74</h1>
+        <div class="header-left">
+            <a href="index.html" class="home-btn">🏠 Home</a>
+            <h1>HSPCs - Page 18/74</h1>
+        </div>
         <div class="stats">
             <div class="stat">Samples: <span id="sample-count">300</span></div>
             <div class="stat">Annotated: <span id="annotated-count">0</span></div>
         </div>
     </div>
 
-    <div class="page-nav"><a href="index.html" class="nav-btn">← Index</a><a href="hspc_page17.html" class="nav-btn">← Previous</a><span class="page-info">Page 18 of 74</span><a href="hspc_page19.html" class="nav-btn">Next →</a></div>
+    <div class="page-nav"><a href="index.html" class="nav-btn">🏠 Home</a><a href="hspc_page17.html" class="nav-btn">← Previous</a><span class="page-info">Page 18 of 74</span><a href="hspc_page19.html" class="nav-btn">Next →</a></div>
 
     <div class="content">
         <div class="grid">
@@ -4255,6 +4261,8 @@
 
         </div>
     </div>
+
+    <div class="page-nav"><a href="index.html" class="nav-btn">🏠 Home</a><a href="hspc_page17.html" class="nav-btn">← Previous</a><span class="page-info">Page 18 of 74</span><a href="hspc_page19.html" class="nav-btn">Next →</a></div>
 
     <div class="controls">
         <button class="control-btn" onclick="exportAnnotations()">Export Annotations</button>
