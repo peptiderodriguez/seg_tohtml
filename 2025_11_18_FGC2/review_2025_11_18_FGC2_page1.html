@@ -4,65 +4,54 @@
     <title>2025_11_18_FGC2 - Page 1/1</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #eee; }
+        body { font-family: monospace; background: #0a0a0a; color: #ddd; }
 
-        .header { background: #16213e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .header h1 { font-size: 1.4em; }
+        .header { background: #111; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-size: 1.2em; font-weight: normal; }
         .stats { display: flex; gap: 20px; font-size: 0.9em; }
-        .stat { padding: 5px 15px; background: #0f3460; border-radius: 20px; }
-        .stat.mk { border: 2px solid #e94560; }
-        .stat.hspc { border: 2px solid #00d9ff; }
+        .stat { padding: 4px 12px; background: #1a1a1a; border: 1px solid #333; }
 
-        .page-nav { text-align: center; padding: 20px; background: #0f3460; margin: 10px 0; }
-        .nav-btn { display: inline-block; padding: 10px 20px; margin: 0 10px; background: #16213e; color: #00d9ff; text-decoration: none; border-radius: 5px; }
-        .nav-btn:hover { background: #1a1a2e; }
-        .page-info { margin: 0 20px; font-size: 1.1em; }
+        .page-nav { text-align: center; padding: 15px; background: #111; border-bottom: 1px solid #333; }
+        .nav-btn { display: inline-block; padding: 8px 16px; margin: 0 10px; background: #1a1a1a; color: #ddd; text-decoration: none; border: 1px solid #333; }
+        .nav-btn:hover { background: #222; }
+        .page-info { margin: 0 20px; }
 
-        .tabs { display: flex; background: #0f3460; }
-        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: bold; transition: all 0.3s; }
-        .tab:hover { background: #16213e; }
-        .tab.active { background: #1a1a2e; }
-        .tab.mk { border-bottom: 3px solid transparent; }
-        .tab.mk.active { border-bottom-color: #e94560; color: #e94560; }
-        .tab.hspc { border-bottom: 3px solid transparent; }
-        .tab.hspc.active { border-bottom-color: #00d9ff; color: #00d9ff; }
+        .tabs { display: flex; background: #111; border-bottom: 1px solid #333; }
+        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; background: #1a1a1a; border-right: 1px solid #333; }
+        .tab:hover { background: #222; }
+        .tab.active { background: #0a0a0a; border-bottom: 2px solid #ddd; }
 
         .content { display: none; padding: 20px; }
         .content.active { display: block; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
 
-        .card { background: #16213e; border-radius: 10px; overflow: hidden; transition: transform 0.2s; }
-        .card:hover { transform: scale(1.02); }
+        .card { background: #111; border: 1px solid #333; }
         .card img { width: 100%; display: block; }
-        .card-info { padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .card-id { font-size: 0.8em; color: #888; }
-        .card-area { font-size: 0.85em; }
+        .card-info { padding: 8px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; }
+        .card-id { font-size: 0.75em; color: #888; }
+        .card-area { font-size: 0.8em; }
 
-        .buttons { display: flex; gap: 5px; }
-        .btn { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .btn-yes { background: #00c853; color: white; }
-        .btn-no { background: #ff5252; color: white; }
-        .btn-skip { background: #666; color: white; }
-        .btn:hover { opacity: 0.8; transform: scale(1.05); }
+        .buttons { display: flex; gap: 4px; }
+        .btn { padding: 6px 12px; border: 1px solid #333; background: #1a1a1a; color: #ddd; cursor: pointer; font-family: monospace; font-size: 0.85em; }
+        .btn:hover { background: #222; }
 
-        .card.labeled-yes { border: 3px solid #00c853; }
-        .card.labeled-no { border: 3px solid #ff5252; }
+        .card.labeled-yes { border: 2px solid #4a4; }
+        .card.labeled-no { border: 2px solid #a44; }
 
-        .controls { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; }
-        .control-btn { padding: 12px 25px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 1em; }
-        .save-btn { background: #00c853; color: white; }
-        .export-btn { background: #2196f3; color: white; }
+        .controls { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px; }
+        .control-btn { padding: 10px 20px; border: 1px solid #333; background: #1a1a1a; color: #ddd; cursor: pointer; font-family: monospace; }
+        .control-btn:hover { background: #222; }
 
-        .toast { position: fixed; bottom: 80px; right: 20px; background: #333; color: white; padding: 15px 25px; border-radius: 10px; display: none; }
+        .toast { position: fixed; bottom: 70px; right: 20px; background: #222; color: #ddd; padding: 12px 20px; border: 1px solid #333; display: none; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>2025_11_18_FGC2 - Page 1/1</h1>
         <div class="stats">
-            <div class="stat mk">MKs: <span id="mk-count">7</span> (<span id="mk-labeled">0</span> labeled)</div>
-            <div class="stat hspc">HSPCs: <span id="hspc-count">24</span> (<span id="hspc-labeled">0</span> labeled)</div>
+            <div class="stat mk">MKs: <span id="mk-count">7</span> (<span id="mk-labeled">0</span> on page, <span id="mk-global">0</span> total)</div>
+            <div class="stat hspc">HSPCs: <span id="hspc-count">24</span> (<span id="hspc-labeled">0</span> on page, <span id="hspc-global">0</span> total)</div>
         </div>
     </div>
 
@@ -152,10 +141,38 @@
         }
 
         function updateCounts() {
+            // Per-page counts
             const mkLabeled = Object.values(labels.mk).filter(v => v !== -1 && v !== undefined).length;
             const hspcLabeled = Object.values(labels.hspc).filter(v => v !== -1 && v !== undefined).length;
             document.getElementById('mk-labeled').textContent = mkLabeled;
             document.getElementById('hspc-labeled').textContent = hspcLabeled;
+
+            // Update global counts
+            updateGlobalCounts();
+        }
+
+        function updateGlobalCounts() {
+            // Load all page labels across ALL slides and sum up global counts
+            let globalMK = 0;
+            let globalHSPC = 0;
+
+            // Scan ALL localStorage keys for any slide pages
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('unified_labels_') && key.includes('_page')) {
+                    const pageLabels = localStorage.getItem(key);
+                    if (pageLabels) {
+                        try {
+                            const parsed = JSON.parse(pageLabels);
+                            globalMK += Object.values(parsed.mk || {}).filter(v => v !== -1 && v !== undefined).length;
+                            globalHSPC += Object.values(parsed.hspc || {}).filter(v => v !== -1 && v !== undefined).length;
+                        } catch(e) {}
+                    }
+                }
+            }
+
+            document.getElementById('mk-global').textContent = globalMK;
+            document.getElementById('hspc-global').textContent = globalHSPC;
         }
 
         function saveToLocalStorage() {
