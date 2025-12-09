@@ -514,14 +514,8 @@
                 return;
             }}
 
-            // Find all unified_labels keys
-            const keysToDelete = [];
-            for (let i = 0; i < localStorage.length; i++) {{
-                const key = localStorage.key(i);
-                if (key && key.startsWith('unified_labels_')) {{
-                    keysToDelete.push(key);
-                }}
-            }}
+            // Find all unified_labels keys using Object.keys()
+            const keysToDelete = Object.keys(localStorage).filter(key => key.startsWith('unified_labels_'));
 
             // Delete all keys
             keysToDelete.forEach(key => localStorage.removeItem(key));
