@@ -156,17 +156,23 @@
             let globalMK = 0;
             let globalHSPC = 0;
 
-            // Scan ALL localStorage keys for any slide pages
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith('unified_labels_') && key.includes('_page')) {
-                    const pageLabels = localStorage.getItem(key);
-                    if (pageLabels) {
-                        try {
+            // Scan ALL localStorage keys for any unified_labels entries
+            const allKeys = Object.keys(localStorage);
+            for (const key of allKeys) {
+                if (key.startsWith('unified_labels_') && key.includes('_page')) {
+                    try {
+                        const pageLabels = localStorage.getItem(key);
+                        if (pageLabels) {
                             const parsed = JSON.parse(pageLabels);
-                            globalMK += Object.values(parsed.mk || {}).filter(v => v !== -1 && v !== undefined).length;
-                            globalHSPC += Object.values(parsed.hspc || {}).filter(v => v !== -1 && v !== undefined).length;
-                        } catch(e) {}
+                            if (parsed.mk) {
+                                globalMK += Object.values(parsed.mk).filter(v => v !== -1 && v !== undefined).length;
+                            }
+                            if (parsed.hspc) {
+                                globalHSPC += Object.values(parsed.hspc).filter(v => v !== -1 && v !== undefined).length;
+                            }
+                        }
+                    } catch(e) {
+                        console.error('Error parsing labels from key:', key, e);
                     }
                 }
             }
