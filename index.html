@@ -12,6 +12,9 @@
         .stats { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
         .stat { padding: 15px 30px; background: #1a1a1a; border: 1px solid #333; }
         .stat .number { display: block; font-size: 2em; margin-top: 10px; }
+        .stat.positive { border-left: 4px solid #4a4; }
+        .stat.negative { border-left: 4px solid #a44; }
+        .stat.unsure { border-left: 4px solid #da4; }
 
         .note { text-align: center; margin: 20px 0; padding: 15px; background: #111; border: 1px solid #333; border-left: 3px solid #555; }
 
@@ -39,13 +42,35 @@
                 <span>Total HSPCs</span>
                 <span class="number">21,922</span>
             </div>
-            <div class="stat">
-                <span>MK Annotations</span>
-                <span class="number" id="mk-annotation-count">0</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat positive">
+                <span>MK ✓</span>
+                <span class="number" id="mk-positive-count">0</span>
             </div>
-            <div class="stat">
-                <span>HSPC Annotations</span>
-                <span class="number" id="hspc-annotation-count">0</span>
+            <div class="stat negative">
+                <span>MK ✗</span>
+                <span class="number" id="mk-negative-count">0</span>
+            </div>
+            <div class="stat unsure">
+                <span>MK ?</span>
+                <span class="number" id="mk-unsure-count">0</span>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat positive">
+                <span>HSPC ✓</span>
+                <span class="number" id="hspc-positive-count">0</span>
+            </div>
+            <div class="stat negative">
+                <span>HSPC ✗</span>
+                <span class="number" id="hspc-negative-count">0</span>
+            </div>
+            <div class="stat unsure">
+                <span>HSPC ?</span>
+                <span class="number" id="hspc-unsure-count">0</span>
             </div>
         </div>
 
@@ -79,8 +104,8 @@
 
     <script>
         function updateAnnotationCounts() {
-            let mkAnnotations = 0;
-            let hspcAnnotations = 0;
+            let mkPositive = 0, mkNegative = 0, mkUnsure = 0;
+            let hspcPositive = 0, hspcNegative = 0, hspcUnsure = 0;
 
             const allKeys = Object.keys(localStorage);
 
@@ -88,18 +113,30 @@
                 if (key.startsWith('mk_labels_page')) {
                     try {
                         const labels = JSON.parse(localStorage.getItem(key));
-                        mkAnnotations += Object.keys(labels).length;
+                        for (const [idx, label] of Object.entries(labels)) {
+                            if (label === 1) mkPositive++;
+                            else if (label === 0) mkNegative++;
+                            else if (label === 2) mkUnsure++;
+                        }
                     } catch(e) {}
                 } else if (key.startsWith('hspc_labels_page')) {
                     try {
                         const labels = JSON.parse(localStorage.getItem(key));
-                        hspcAnnotations += Object.keys(labels).length;
+                        for (const [idx, label] of Object.entries(labels)) {
+                            if (label === 1) hspcPositive++;
+                            else if (label === 0) hspcNegative++;
+                            else if (label === 2) hspcUnsure++;
+                        }
                     } catch(e) {}
                 }
             }
 
-            document.getElementById('mk-annotation-count').textContent = mkAnnotations.toLocaleString();
-            document.getElementById('hspc-annotation-count').textContent = hspcAnnotations.toLocaleString();
+            document.getElementById('mk-positive-count').textContent = mkPositive.toLocaleString();
+            document.getElementById('mk-negative-count').textContent = mkNegative.toLocaleString();
+            document.getElementById('mk-unsure-count').textContent = mkUnsure.toLocaleString();
+            document.getElementById('hspc-positive-count').textContent = hspcPositive.toLocaleString();
+            document.getElementById('hspc-negative-count').textContent = hspcNegative.toLocaleString();
+            document.getElementById('hspc-unsure-count').textContent = hspcUnsure.toLocaleString();
         }
 
         function exportCellTypeAnnotations(cellType, totalPages) {

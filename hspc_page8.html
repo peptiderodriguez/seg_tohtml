@@ -11,8 +11,11 @@
         .header-left { display: flex; align-items: center; gap: 15px; }
         .home-btn { padding: 8px 16px; background: #1a1a1a; border: 1px solid #333; color: #ddd; text-decoration: none; }
         .home-btn:hover { background: #222; }
-        .stats { display: flex; gap: 20px; font-size: 0.9em; }
-        .stat { padding: 4px 12px; background: #1a1a1a; border: 1px solid #333; }
+        .stats { display: flex; gap: 15px; font-size: 0.85em; }
+        .stat { padding: 4px 10px; background: #1a1a1a; border: 1px solid #333; }
+        .stat.positive { border-left: 3px solid #4a4; }
+        .stat.negative { border-left: 3px solid #a44; }
+        .stat.unsure { border-left: 3px solid #da4; }
 
         .page-nav { text-align: center; padding: 15px; background: #111; border-bottom: 1px solid #333; }
         .nav-btn { display: inline-block; padding: 8px 16px; margin: 0 10px; background: #1a1a1a; color: #ddd; text-decoration: none; border: 1px solid #333; }
@@ -50,8 +53,10 @@
             <h1>HSPCs - Page 8/74</h1>
         </div>
         <div class="stats">
-            <div class="stat">Samples: <span id="sample-count">300</span></div>
-            <div class="stat">Annotated: <span id="annotated-count">0</span></div>
+            <div class="stat">Total: <span id="sample-count">300</span></div>
+            <div class="stat positive">✓ <span id="positive-count">0</span></div>
+            <div class="stat negative">✗ <span id="negative-count">0</span></div>
+            <div class="stat unsure">? <span id="unsure-count">0</span></div>
         </div>
     </div>
 
@@ -4632,12 +4637,20 @@
         }
 
         function updateStats() {
-            let annotatedCount = 0;
+            let positiveCount = 0;
+            let negativeCount = 0;
+            let unsureCount = 0;
+
             document.querySelectorAll('.card').forEach(card => {
                 const label = parseInt(card.dataset.label);
-                if (label !== -1) annotatedCount++;
+                if (label === 1) positiveCount++;
+                else if (label === 0) negativeCount++;
+                else if (label === 2) unsureCount++;
             });
-            document.getElementById('annotated-count').textContent = annotatedCount;
+
+            document.getElementById('positive-count').textContent = positiveCount;
+            document.getElementById('negative-count').textContent = negativeCount;
+            document.getElementById('unsure-count').textContent = unsureCount;
         }
 
         function clearPageAnnotations() {
