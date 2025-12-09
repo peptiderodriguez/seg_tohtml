@@ -1,563 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Unified Review Index - Phase 1 (2% Sample) - Paginated</title>
+    <title>Combined MK+HSPC Review (Separate Sets)</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: monospace;
-            background: #0a0a0a;
-            color: #ddd;
-            padding: 20px;
-        }
+        body { font-family: monospace; background: #0a0a0a; color: #ddd; padding: 20px; }
 
-        .header {
-            background: #111;
-            padding: 20px;
-            border: 1px solid #333;
-            margin-bottom: 20px;
-        }
+        .header { background: #111; padding: 20px; border: 1px solid #333; margin-bottom: 20px; text-align: center; }
+        h1 { font-size: 1.5em; font-weight: normal; margin-bottom: 15px; }
 
-        .header h1 {
-            font-size: 1.5em;
-            font-weight: normal;
-            margin-bottom: 10px;
-        }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .stat { padding: 15px 30px; background: #1a1a1a; border: 1px solid #333; }
+        .stat .number { display: block; font-size: 2em; margin-top: 10px; }
 
-        .summary {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-        }
+        .note { text-align: center; margin: 20px 0; padding: 15px; background: #111; border: 1px solid #333; border-left: 3px solid #555; }
 
-        .summary-stat {
-            padding: 12px 24px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-        }
+        .section { margin: 40px 0; }
+        .section h2 { font-size: 1.3em; margin-bottom: 15px; padding: 10px; background: #111; border: 1px solid #333; border-left: 3px solid #555; }
 
-        .summary-stat .number {
-            font-size: 1.5em;
-            display: block;
-            margin-top: 8px;
-        }
-
-        .note {
-            text-align: center;
-            margin: 15px 0;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #333;
-            border-left: 3px solid #555;
-        }
-
-        .slides-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .slide-card {
-            background: #111;
-            border: 1px solid #333;
-            padding: 15px;
-            cursor: pointer;
-        }
-
-        .slide-card:hover {
-            background: #1a1a1a;
-            border-color: #555;
-        }
-
-        .slide-name {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-
-        .slide-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-        }
-
-        .slide-stat {
-            text-align: center;
-        }
-
-        .slide-stat .label {
-            font-size: 0.8em;
-            color: #888;
-            display: block;
-        }
-
-        .slide-stat .value {
-            font-size: 1.2em;
-            display: block;
-            margin-top: 5px;
-        }
-
-        .page-info {
-            text-align: center;
-            padding: 8px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            margin-bottom: 10px;
-            font-size: 0.85em;
-            color: #888;
-        }
-
-        .view-btn {
-            width: 100%;
-            padding: 12px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #ddd;
-            font-family: monospace;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .view-btn:hover {
-            background: #222;
-        }
-
-        .group-header {
-            grid-column: 1 / -1;
-            font-size: 1.2em;
-            font-weight: normal;
-            margin-top: 15px;
-            padding: 10px;
-            background: #111;
-            border: 1px solid #333;
-            border-left: 3px solid #555;
-        }
-
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            color: #888;
-            font-size: 0.9em;
-        }
+        .controls { text-align: center; margin: 30px 0; }
+        .btn { padding: 15px 30px; background: #1a1a1a; border: 1px solid #333; color: #ddd; cursor: pointer; font-family: monospace; font-size: 1.1em; margin: 10px; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #222; }
+        .btn-primary { border-color: #4a4; color: #4a4; }
+        .btn-clear { border-color: #a44; color: #a44; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🔬 Unified MK + HSPC Review (Paginated)</h1>
-        <p style="font-size: 1.2em; color: #888; margin-top: 10px;">Phase 1: 2% Sample Across 16 Slides</p>
+        <h1>Combined MK + HSPC Review</h1>
+        <p style="color: #888;">All slides combined - Phase 1 (2% sample) - Separate annotation sets</p>
 
-        <div class="summary">
-            <div class="summary-stat mk">
-                <span>Megakaryocytes (MKs)</span>
+        <div class="stats">
+            <div class="stat">
+                <span>Total MKs</span>
                 <span class="number">1,195</span>
             </div>
-            <div class="summary-stat hspc">
-                <span>HSPCs</span>
+            <div class="stat">
+                <span>Total HSPCs</span>
                 <span class="number">21,922</span>
             </div>
-            <div class="summary-stat pages">
-                <span>Total Pages</span>
-                <span class="number">85</span>
+            <div class="stat">
+                <span>MK Annotations</span>
+                <span class="number" id="mk-annotation-count">0</span>
             </div>
-        </div>
-
-        <div class="summary" style="margin-top: 15px;">
-            <div class="summary-stat">
-                <span>Annotations</span>
-                <span class="number" id="annotation-count">0</span>
+            <div class="stat">
+                <span>HSPC Annotations</span>
+                <span class="number" id="hspc-annotation-count">0</span>
             </div>
         </div>
 
         <div class="note">
-            📄 Each page contains up to 300 samples per cell type for GitHub hosting
-        </div>
-
-        <div style="text-align: center; margin-top: 15px;">
-            <button onclick="clearAllAnnotations()" style="padding: 12px 24px; background: #1a1a1a; border: 1px solid #a44; color: #a44; cursor: pointer; font-family: monospace; font-size: 1em;">Clear All Annotations</button>
+            ⚠ MKs and HSPCs are now <strong>completely separate</strong> - each with their own pages and annotations
         </div>
     </div>
 
-    <div class="slides-grid" id="slides-grid">
-<div class="group-header">🔴 Female GC (FGC)</div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FGC1/review_2025_11_18_FGC1_page1.html'">
-            <div class="slide-name">2025_11_18_FGC1</div>
-            <div class="page-info">39 pages • ~11 MKs + ~294 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">457</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">11496</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">25.2:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
+    <div class="section">
+        <h2>🔴 Megakaryocytes (MKs)</h2>
+        <div class="controls">
+            <a href="mk_page1.html" class="btn btn-primary">Review MKs →</a>
+            <span style="margin: 0 20px; color: #888;">4 pages • ~300 per page</span>
         </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FGC2/review_2025_11_18_FGC2_page1.html'">
-            <div class="slide-name">2025_11_18_FGC2</div>
-            <div class="page-info">1 pages • ~7 MKs + ~24 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">7</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">24</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">3.4:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FGC3/review_2025_11_18_FGC3_page1.html'">
-            <div class="slide-name">2025_11_18_FGC3</div>
-            <div class="page-info">6 pages • ~9 MKs + ~289 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">54</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">1735</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">32.1:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FGC4/review_2025_11_18_FGC4_page1.html'">
-            <div class="slide-name">2025_11_18_FGC4</div>
-            <div class="page-info">10 pages • ~13 MKs + ~278 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">133</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">2785</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">20.9:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-<div class="group-header">🔵 Female HU (FHU)</div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FHU1/review_2025_11_18_FHU1_page1.html'">
-            <div class="slide-name">2025_11_18_FHU1</div>
-            <div class="page-info">1 pages • ~50 MKs + ~177 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">50</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">177</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">3.5:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FHU2/review_2025_11_18_FHU2_page1.html'">
-            <div class="slide-name">2025_11_18_FHU2</div>
-            <div class="page-info">6 pages • ~15 MKs + ~256 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">91</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">1541</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">16.9:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FHU3/review_2025_11_18_FHU3_page1.html'">
-            <div class="slide-name">2025_11_18_FHU3</div>
-            <div class="page-info">3 pages • ~7 MKs + ~223 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">22</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">671</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">30.5:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_FHU4/review_2025_11_18_FHU4_page1.html'">
-            <div class="slide-name">2025_11_18_FHU4</div>
-            <div class="page-info">5 pages • ~14 MKs + ~244 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">73</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">1221</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">16.7:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-<div class="group-header">🟢 Male GC (MGC)</div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MGC1/review_2025_11_18_MGC1_page1.html'">
-            <div class="slide-name">2025_11_18_MGC1</div>
-            <div class="page-info">2 pages • ~36 MKs + ~284 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">72</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">568</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">7.9:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MGC2/review_2025_11_18_MGC2_page1.html'">
-            <div class="slide-name">2025_11_18_MGC2</div>
-            <div class="page-info">1 pages • ~20 MKs + ~11 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">20</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">11</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">0.6:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MGC3/review_2025_11_18_MGC3_page1.html'">
-            <div class="slide-name">2025_11_18_MGC3</div>
-            <div class="page-info">1 pages • ~19 MKs + ~13 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">19</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">13</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">0.7:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MGC4/review_2025_11_18_MGC4_page1.html'">
-            <div class="slide-name">2025_11_18_MGC4</div>
-            <div class="page-info">6 pages • ~18 MKs + ~255 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">108</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">1534</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">14.2:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-<div class="group-header">🟡 Male HU (MHU)</div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MHU1/review_2025_11_18_MHU1_page1.html'">
-            <div class="slide-name">2025_11_18_MHU1</div>
-            <div class="page-info">1 pages • ~14 MKs + ~5 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">14</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">5</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">0.4:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MHU2/review_2025_11_18_MHU2_page1.html'">
-            <div class="slide-name">2025_11_18_MHU2</div>
-            <div class="page-info">1 pages • ~26 MKs + ~31 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">26</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">31</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">1.2:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MHU3/review_2025_11_18_MHU3_page1.html'">
-            <div class="slide-name">2025_11_18_MHU3</div>
-            <div class="page-info">1 pages • ~26 MKs + ~12 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">26</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">12</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">0.5:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
-        <div class="slide-card" onclick="window.location.href='2025_11_18_MHU4/review_2025_11_18_MHU4_page1.html'">
-            <div class="slide-name">2025_11_18_MHU4</div>
-            <div class="page-info">1 pages • ~23 MKs + ~98 HSPCs per page</div>
-            <div class="slide-stats">
-                <div class="slide-stat mk">
-                    <span class="label">MKs</span>
-                    <span class="value">23</span>
-                </div>
-                <div class="slide-stat hspc">
-                    <span class="label">HSPCs</span>
-                    <span class="value">98</span>
-                </div>
-                <div class="slide-stat">
-                    <span class="label">Ratio</span>
-                    <span class="value" style="color: #888;">4.3:1</span>
-                </div>
-            </div>
-            <button class="view-btn">Review Annotations →</button>
-        </div>
-
     </div>
 
-    <div class="footer">
-        <p>🧬 Unified Segmentation Pipeline: SAM2 (MKs) + Cellpose-SAM (HSPCs)</p>
-        <p style="margin-top: 10px;">📄 Paginated for GitHub Pages (<100MB per file)</p>
-        <p style="margin-top: 10px;">Phase 1 → Annotate → Train Classifiers → Phase 2 (5%) → Phase 3 (10%) → Phase 4 (100%)</p>
+    <div class="section">
+        <h2>🔵 HSPCs</h2>
+        <div class="controls">
+            <a href="hspc_page1.html" class="btn btn-primary">Review HSPCs →</a>
+            <span style="margin: 0 20px; color: #888;">74 pages • ~300 per page</span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-clear" onclick="clearAllAnnotations()">Clear All Annotations</button>
     </div>
 
     <script>
-        function updateAnnotationCount() {{
-            // Count total annotations across all slides
-            let totalAnnotations = 0;
+        function updateAnnotationCounts() {
+            let mkAnnotations = 0;
+            let hspcAnnotations = 0;
+
             const allKeys = Object.keys(localStorage);
 
-            for (const key of allKeys) {{
-                if (key.startsWith('unified_labels_') && key.includes('_page')) {{
-                    try {{
-                        const pageLabels = localStorage.getItem(key);
-                        if (pageLabels) {{
-                            const parsed = JSON.parse(pageLabels);
-                            if (parsed.mk) {{
-                                totalAnnotations += Object.values(parsed.mk).filter(v => v !== -1 && v !== undefined).length;
-                            }}
-                            if (parsed.hspc) {{
-                                totalAnnotations += Object.values(parsed.hspc).filter(v => v !== -1 && v !== undefined).length;
-                            }}
-                        }}
-                    }} catch(e) {{}}
-                }}
-            }}
+            for (const key of allKeys) {
+                if (key.startsWith('mk_labels_page')) {
+                    try {
+                        const labels = JSON.parse(localStorage.getItem(key));
+                        mkAnnotations += Object.keys(labels).length;
+                    } catch(e) {}
+                } else if (key.startsWith('hspc_labels_page')) {
+                    try {
+                        const labels = JSON.parse(localStorage.getItem(key));
+                        hspcAnnotations += Object.keys(labels).length;
+                    } catch(e) {}
+                }
+            }
 
-            document.getElementById('annotation-count').textContent = totalAnnotations.toLocaleString();
-        }}
+            document.getElementById('mk-annotation-count').textContent = mkAnnotations.toLocaleString();
+            document.getElementById('hspc-annotation-count').textContent = hspcAnnotations.toLocaleString();
+        }
 
-        function clearAllAnnotations() {{
-            if (!confirm('Are you sure you want to delete ALL annotations across all slides? This cannot be undone.')) {{
-                return;
-            }}
+        function clearAllAnnotations() {
+            if (!confirm('Clear ALL annotations for both MKs and HSPCs? This cannot be undone.')) return;
 
-            // Find all unified_labels keys using Object.keys()
-            const keysToDelete = Object.keys(localStorage).filter(key => key.startsWith('unified_labels_'));
+            const keysToDelete = Object.keys(localStorage).filter(key =>
+                key.startsWith('mk_labels_') || key.startsWith('hspc_labels_')
+            );
 
-            // Delete all keys
             keysToDelete.forEach(key => localStorage.removeItem(key));
 
-            alert(`Cleared ${{keysToDelete.length}} annotation pages.`);
+            alert(`Cleared ${keysToDelete.length} annotation pages.`);
             location.reload();
-        }}
+        }
 
-        // Update count on page load
-        updateAnnotationCount();
+        updateAnnotationCounts();
     </script>
 </body>
 </html>
